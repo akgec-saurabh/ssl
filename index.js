@@ -15,9 +15,6 @@ const cerd = {
   cert,
 };
 
-const httpsServer = https.createServer(cerd, app);
-httpsServer.listen(8443);
-
 app.get("/api", (req, res, next) => {
   res.json({ messge: "hello work" });
 });
@@ -32,3 +29,6 @@ app.get("/api", (req, res, next) => {
 // );
 
 app.listen(3002);
+
+const httpsServer = https.createServer(cerd, app);
+httpsServer.listen(8443);
