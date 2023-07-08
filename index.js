@@ -1,34 +1,23 @@
-const express = require("express");
-const fs = require("fs");
-const cors = require("cors");
-const { dirname } = require("path");
 const https = require("https");
+const fs = require("fs");
 
-const key = fs.readFileSync("private.key");
-const cert = fs.readFileSync("certificate.crt");
-const app = express();
+// Read the private key and certificate files
+const privateKey = fs.readFileSync("./private.key", "utf8");
+const certificate = fs.readFileSync("./certificate.crt", "utf8");
 
-// app.use(cors);
-
-const cerd = {
-  key,
-  cert,
+// Create the HTTPS server
+const options = {
+  key: privateKey,
+  cert: certificate,
 };
 
-app.get("/api", (req, res, next) => {
-  res.json({ messge: "hello work" });
+const server = https.createServer(options, (req, res) => {
+  // Handle incoming requests here
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Hello, HTTPS server!");
 });
 
-// app.get(
-//   "/home/ec2-user/hello/7184CF8DE9EE76FDC3B06D426284F3CA.txt",
-//   (req, res, next) => {
-//     res.sendFile(
-//       "C:/Users/akgec/Downloads/7184CF8DE9EE76FDC3B06D426284F3CA.txt"
-//     );
-//   }
-// );
-
-app.listen(3002);
-
-const httpsServer = https.createServer(cerd, app);
-httpsServer.listen(443);
+// Start the server
+server.listen(443, () => {
+  console.log("HTTPS server is running on port 443");
+});
